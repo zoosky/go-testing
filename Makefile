@@ -1,4 +1,4 @@
-.PHONY: build run test test-integration clean swagger help
+.PHONY: build run test test-integration benchmark clean swagger help
 
 # Default target
 all: build
@@ -41,6 +41,17 @@ test-integration:
 # Run all tests (unit and integration)
 test-all: test test-integration
 
+# Run benchmarks
+benchmark:
+	@echo "Running benchmarks..."
+	@echo "Benchmarking calculator package..."
+	@go test -bench=. -benchmem ./pkg/calculator
+	@echo "\nBenchmarking database package..."
+	@go test -bench=. -benchmem ./internal/database
+	@echo "\nBenchmarking API package..."
+	@go test -bench=. -benchmem ./internal/api
+	@echo "\nBenchmark complete."
+
 # Generate Swagger documentation
 swagger:
 	@echo "Generating Swagger documentation..."
@@ -77,6 +88,7 @@ help:
 	@echo "  test-coverage  - Run unit tests with coverage"
 	@echo "  test-integration - Run integration tests"
 	@echo "  test-all       - Run all tests (unit and integration)"
+	@echo "  benchmark      - Run performance benchmarks"
 	@echo "  swagger        - Generate Swagger documentation"
 	@echo "  clean          - Clean build artifacts"
 	@echo "  help           - Show this help"

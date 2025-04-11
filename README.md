@@ -139,16 +139,44 @@ go test -tags=integration ./test/integration
 
 ### Benchmarks
 
-Run benchmarks:
+Run all benchmarks with the Make target:
 
 ```bash
-go test -bench=. ./...
+make benchmark
 ```
 
-Run benchmarks with memory allocation information:
+Run specific benchmarks:
 
 ```bash
-go test -bench=. -benchmem ./...
+# Run calculator benchmarks
+go test -bench=. -benchmem ./pkg/calculator
+
+# Run database benchmarks
+go test -bench=. -benchmem ./internal/database
+
+# Run API benchmarks
+go test -bench=. -benchmem ./internal/api
+```
+
+Run benchmarks with additional options:
+
+```bash
+# Run specific benchmark functions (regexp matching)
+go test -bench=BenchmarkAdd ./pkg/calculator
+
+# Show more detailed memory allocation statistics
+go test -bench=. -benchmem ./pkg/calculator
+
+# Run benchmarks with custom count (10 iterations)
+go test -bench=. -count=10 ./pkg/calculator
+
+# Compare benchmark results with benchstat (needs benchstat installed)
+# First, run benchmarks and save results
+go test -bench=. -count=10 ./pkg/calculator > old.txt
+# Make changes, then run again
+go test -bench=. -count=10 ./pkg/calculator > new.txt
+# Compare results
+benchstat old.txt new.txt
 ```
 
 ### Other Test Flags
