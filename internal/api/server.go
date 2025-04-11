@@ -56,15 +56,24 @@ func (s *Server) Router() http.Handler {
 	mux.HandleFunc("GET /calculator/multiply", s.multiply)
 	mux.HandleFunc("GET /calculator/divide", s.divide)
 	
-	// Swagger endpoint
-	mux.HandleFunc("GET /swagger/*", func(w http.ResponseWriter, r *http.Request) {
-		httpSwagger.Handler(
-			httpSwagger.URL("/swagger/doc.json"),
-			httpSwagger.DeepLinking(true),
-			httpSwagger.DocExpansion("list"),
-			httpSwagger.DomID("swagger-ui"),
-		).ServeHTTP(w, r)
-	})
+	// Swagger endpoints
+	handler := httpSwagger.Handler(
+		httpSwagger.URL("/swagger/doc.json"),
+		httpSwagger.DeepLinking(true),
+		httpSwagger.DocExpansion("list"),
+		httpSwagger.DomID("swagger-ui"),
+	)
+	
+	// Handle specific Swagger endpoints
+	mux.HandleFunc("GET /swagger/index.html", handler.ServeHTTP)
+	mux.HandleFunc("GET /swagger/doc.json", handler.ServeHTTP)
+	mux.HandleFunc("GET /swagger/swagger-ui.css", handler.ServeHTTP)
+	mux.HandleFunc("GET /swagger/swagger-ui-bundle.js", handler.ServeHTTP)
+	mux.HandleFunc("GET /swagger/swagger-ui-standalone-preset.js", handler.ServeHTTP)
+	mux.HandleFunc("GET /swagger/swagger-initializer.js", handler.ServeHTTP)
+	
+	// Also keep a wildcard handler for other Swagger resources
+	mux.HandleFunc("GET /swagger/", handler.ServeHTTP)
 	
 	return mux
 }

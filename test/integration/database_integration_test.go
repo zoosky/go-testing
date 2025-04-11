@@ -9,30 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// TestMain sets up and tears down resources for integration tests
-func TestMain(m *testing.M) {
-	// Setup would include things like:
-	// - Starting a test database container
-	// - Creating schema
-	// - Setting up environment variables
-	
-	// In a real project, we would use testcontainers-go or similar:
-	// container, err := startTestDatabase()
-	// if err != nil {
-	//     log.Fatalf("Failed to start test database: %v", err)
-	// }
-	
-	// Run tests
-	// exitCode := m.Run()
-	_ = m.Run()
-	
-	// Cleanup would include things like:
-	// - Stopping the database container
-	// container.Terminate(context.Background())
-	
-	// Exit with the test exit code
-	// os.Exit(exitCode)
-}
+// Note: The TestMain function has been moved to api_server_test.go to avoid multiple definitions
 
 // TestRepositoryConcurrency tests concurrent operations on the repository
 func TestRepositoryConcurrency(t *testing.T) {
